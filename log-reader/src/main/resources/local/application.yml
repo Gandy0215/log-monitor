@@ -1,0 +1,9 @@
+server:
+  port: 9992
+
+app:
+  server:
+    url: http://localhost:9991
+  log:
+    name: server1
+    path: E:\\project\\log-monitor\\log-reader\\src\\test\\test.log
