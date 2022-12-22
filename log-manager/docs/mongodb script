@@ -1,0 +1,4 @@
+# mongodb 접속
+mongo -u root -p mongodb --authenticationDatabase admin
+
+db.runCommand({convertToCapped: 'serverlog', size: 8192, max: 5});

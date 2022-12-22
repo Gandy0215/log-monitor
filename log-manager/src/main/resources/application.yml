@@ -1,0 +1,14 @@
+spring:
+  data:
+    mongodb:
+      auto-index-creation: true
+      host: localhost
+      port: 27017
+      database: logdb
+      authentication-database: admin
+      username: root
+      password: mongodb
+
+
+server:
+  port: 9991
