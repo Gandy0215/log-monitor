@@ -2,6 +2,7 @@ package me.gandy.logreader.component;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -48,5 +49,20 @@ public class LogWebClient {
 			.log()
 			.block();
 		return result.toString();
+	}
+
+	public void deleteLogLine(String serverName) {
+		if (webClient == null) {
+			setWebClient();
+		}
+
+		this.webClient
+			.method(HttpMethod.DELETE)
+			.uri("/log/")
+			//			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			.body(Mono.just(serverName), String.class)
+			.retrieve()
+			.toEntity(Void.class)
+			;
 	}
 }
