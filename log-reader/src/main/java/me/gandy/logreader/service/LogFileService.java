@@ -1,26 +1,30 @@
 package me.gandy.logreader.service;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.gandy.logreader.component.LogWebClient;
 import me.gandy.logreader.model.ServerLog;
 
 @Slf4j
-@Service
-public class LogFileService {
+public class LogFileService extends Thread {
 
-	@Autowired
 	LogWebClient logWeblclent;
+	String serverName;
+	String logFilePath;
 
-	public void monitorLogfile(String serverName, String logFilePath) throws IOException, InterruptedException {
+	public LogFileService(LogWebClient logWeblclent, String serverName, String logFilePath) {
+		this.logWeblclent = logWeblclent;
+		this.serverName = serverName;
+		this.logFilePath = logFilePath;
+	}
+
+	@SneakyThrows
+	public void run() {
 
 		File logFile = new File(logFilePath);
 		logWeblclent.deleteLogLine(serverName);
@@ -33,7 +37,8 @@ public class LogFileService {
 		while (true) {
 
 			if (!logFile.exists()) {
-				throw new FileNotFoundException();
+				System.out.println("File Not Found :: " + logFilePath);
+				Thread.sleep(5000);
 			}
 
 			if (filePointer > logFile.length()) {
